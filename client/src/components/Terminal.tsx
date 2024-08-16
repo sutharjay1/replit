@@ -25,9 +25,12 @@ const TerminalController: React.FC = ({
   useEffect(() => {
     socket.on("terminal:data", (data: string) => {
       console.log(`Received data from server: '${data}'`);
+
       setTerminalLineData((prevData) => [
         ...prevData,
-        <TerminalOutput key={prevData.length}>{data}</TerminalOutput>,
+        <TerminalOutput key={prevData.length}>
+          {data.toString()}
+        </TerminalOutput>,
       ]);
     });
 
@@ -38,15 +41,16 @@ const TerminalController: React.FC = ({
   }, []);
 
   return (
-    <div className="w-full bg-[#252a33] text-white p-4 rounded-lg shadow-md">
+    <div className="w-full bg-[#252a33] text-white p-2 rounded-lg shadow-md">
       <Terminal
-        name="React Terminal Usage Example"
         colorMode={ColorMode.Dark}
         onInput={handleInput}
-        height="45vh"
+        height="78vh"
         prompt=">"
       >
-        {terminalLineData}
+        {terminalLineData.map((line, index) => (
+          <TerminalOutput key={index}>{line}</TerminalOutput>
+        ))}
       </Terminal>
     </div>
   );
